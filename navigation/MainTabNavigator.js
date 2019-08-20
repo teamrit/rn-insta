@@ -11,15 +11,14 @@ const config = Platform.select({
   default: {},
 });
 
+// STACK: Home
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
   },
   config
 );
-
 HomeStack.navigationOptions = {
-  tabBarLabel: '',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -31,47 +30,80 @@ HomeStack.navigationOptions = {
     />
   ),
 };
-
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+// STACK: Link
+const NotificationsStack = createStackNavigator(
   {
     Links: LinksScreen,
   },
   config
 );
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+NotificationsStack.navigationOptions = {
+  showLabel: false,
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-heart' : 'md-heart'} />
   ),
 };
+NotificationsStack.path = '';
 
-LinksStack.path = '';
-
+// STACK: Settings
 const SettingsStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Settsings: SettingsScreen,
   },
   config
 );
-
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'} />
   ),
 };
-
 SettingsStack.path = '';
+
+// STACK: Search
+const SearchStack = createStackNavigator(
+    {
+        Settings: SettingsScreen,
+    },
+    config
+);
+
+SearchStack.navigationOptions = {
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'} />
+    ),
+};
+
+SearchStack.path = '';
+
+const AddMediaStack = createStackNavigator(
+    {
+        Settings: SettingsScreen,
+    },
+    config
+);
+
+AddMediaStack.navigationOptions = {
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-add-circle' : 'md-add-circle'} />
+    ),
+};
+
+AddMediaStack.path = '';
+
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  SearchStack,
+  AddMediaStack,
+  NotificationsStack,
   SettingsStack,
+}, {
+    tabBarOptions: {
+        showLabel: false
+    }
 });
-
 tabNavigator.path = '';
 
 export default tabNavigator;
