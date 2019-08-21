@@ -1,74 +1,56 @@
-import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View,} from 'react-native';
+import React , {useEffect} from 'react';
+import {FlatList, ScrollView, Text, View,} from 'react-native';
 import {styles} from "../constants/Styles";
-import {MonoText} from '../components/StyledText';
 import {StatusBarGap} from "../components/StatusBarGap";
 import {AppTopBar} from "../components/AppTopBar";
 import {StoriesContainer} from "../components/StoriesContainer";
+import {FeedPost} from "../components/FeedPost";
+import {connect} from 'react-redux';
+import {loadRandomPosts} from "../redux/actions/FeedActions";
 
-export default function HomeScreen() {
+function HomeFeedScreen(props) {
+  let {posts} = props || [];
+  posts = posts[0] || [];
+  console.log(posts.length,posts[0]);
+  useEffect(() => {
+    // Mount code
+    props.loadPosts();
+
+    return () => {
+
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBarGap />
-      <AppTopBar />
-      <StoriesContainer/>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-      </ScrollView>
+        <ScrollView styles={styles.container}>
+            <AppTopBar />
+            <StoriesContainer/>
+          {posts &&
+            <FlatList
+              data={posts}
+              style={styles.container}
+              keyExtractor={(item) => {
+                return item.key+''
+              }}
+              renderItem={({item}) =>
+                <FeedPost
+                  location={item.location}
+                  isStorySeen={item.isStorySeen}
+                  username={item.name || ""}
+                  imageUrl={item.imageUrl || ""}
+                />}
+            />
+          }
 
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
-      </View>
+        </ScrollView>
     </View>
   );
 }
 
-HomeScreen.navigationOptions = {
+HomeFeedScreen.navigationOptions = {
   header: null,
 };
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
+export default connect((state => state.feed), {loadPosts: loadRandomPosts})(HomeFeedScreen);

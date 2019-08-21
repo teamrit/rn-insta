@@ -8,7 +8,7 @@ export const getRandomName = () => {
     return names[Math.floor(Math.random()*names.length)];
 };
 
-export const generateImageUrl = () => {
+export const generateAvatarUrl = () => {
     return `https://api.adorable.io/avatars/400/${getRandomName()}@adorable.io.png`;
 };
 
@@ -20,7 +20,7 @@ export const StoryProfile = ({username='',isStorySeen = false}) => {
                 {/*{isStorySeen && (*/}
                 <Image
                     style={[{width: profileWidth,height:profileWidth,borderRadius:30}]}
-                    source={{uri: generateImageUrl()}}
+                    source={{uri: generateAvatarUrl()}}
                 />
                 {/*)}*/}
             </View>
