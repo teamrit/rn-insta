@@ -6,7 +6,6 @@ import {getRandomStories} from "../constants/DataGenerator";
 
 export const StoriesContainer = () => {
     const followers = getRandomStories() || [];
-    console.log(followers);
     return (
         <View style={[{height:100,paddingTop:15,borderBottomWidth:0.5,borderBottomColor:'#d3d3d3'},styles.flexRow]}>
             <FlatList
