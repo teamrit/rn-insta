@@ -24,7 +24,9 @@ function HomeFeedScreen(props) {
   return (
     <View style={styles.container}>
       <StatusBarGap />
-        <ScrollView styles={styles.container}>
+        <ScrollView
+          styles={styles.container}
+          showsHorizontalScrollIndicator={false} >
             <AppTopBar />
             <StoriesContainer/>
           {posts &&

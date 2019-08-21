@@ -1,25 +1,23 @@
 import React, {useState} from "react";
-import {View, Text, Image,TouchableWithoutFeedback} from "react-native";
+import {View, Text, Image,TouchableWithoutFeedback, Animated} from "react-native";
 import {styles} from "../constants/Styles";
 import {generateAvatarUrl} from "./StoryProfile";
 import Colors from "../constants/Colors";
 import {Ionicons} from "@expo/vector-icons";
 import SimpleLineIcon from "@expo/vector-icons/SimpleLineIcons";
 import Layout from "../constants/Layout";
+import {MediaHeart, useFadeInAnimation, useFadeInOut} from "./MediaHeart";
 
 const StoryProfile = ({username='',isStorySeen = false}) => {
     const profileWidth = isStorySeen ? 27 : 30;
     return (
         <View style={{width:35}}>
             <View style={[{height:30,width:30,borderRadius:30,marginLeft:10,marginRight:10},isStorySeen && styles.storySeen]}>
-                {/*{isStorySeen && (*/}
                 <Image
                     style={[{width: profileWidth,height:profileWidth,borderRadius:30}]}
                     source={{uri: generateAvatarUrl()}}
                 />
-                {/*)}*/}
             </View>
-            {/*<Text numberOfLines={1} style={[{width:70},styles.storyProfileText]}>{username}</Text>*/}
         </View>
     )
 };
@@ -29,12 +27,17 @@ export const FeedPost = ({location='',username='',imageUrl=''}) => {
     const [lastImagePress, setLikeTime] = useState(null);
     const [isLiked, setLiked] = useState(false);
 
+    const animation = useFadeInAnimation({ doAnimation: isLiked, duration: 1000 });
+    let opacity = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+    });
+
     const handleImageDoublePress = () => {
         setLiked(true);
-        console.log("is liked");
     };
 
-    return <View style={styles.b1}>
+    return <View>
         {/*Post Header*/}
         <View style={[styles.flexRow, {height: 50, padding: 5}]}>
             <View style={[styles.centeredView, {marginRight: 15}]}>
@@ -42,9 +45,9 @@ export const FeedPost = ({location='',username='',imageUrl=''}) => {
             </View>
             <View style={[styles.flexGrow, styles.flexColumn, {paddingTop: 3, paddingBottom: 3}]}>
                 <Text style={[styles.feedUserName, styles.textBold, {alignSelf: 'flex-start'}]}>{username || ''}</Text>
-                <Text styles={[styles.feedUserLocation, {alignSelf: 'flex-start'}]}>{location || ''}</Text>
+                <Text style={[styles.storyProfileText, {alignSelf: 'flex-start'}]}>{location || ''}</Text>
             </View>
-            <View style={[{width: 30, alignSelf: 'flex-end'}, styles.centeredView, styles.b1]}>
+            <View style={[{width: 30, alignSelf: 'flex-end'}, styles.centeredView]}>
                 <Ionicons
                     name={"md-more"}
                     size={30}
@@ -66,12 +69,7 @@ export const FeedPost = ({location='',username='',imageUrl=''}) => {
               }
             }}>
               <View>
-                <Ionicons
-                  name={isLiked ? "md-heart" : "md-heart-empty"}
-                  style={{position: 'absolute',zIndex:10,alignSelf:'center',top:Layout.window.width/2-50}}
-                  size={100}
-                  color={isLiked ? Colors.heartIcon : Colors.tabIconSelected}
-                />
+                <MediaHeart isLiked={isLiked}/>
                 <Image
                   source={{uri: imageUrl}}
                   style={{width: Layout.window.width,height:Layout.window.width}}
@@ -82,13 +80,23 @@ export const FeedPost = ({location='',username='',imageUrl=''}) => {
 
         {/*Action Buttons: Like,Comment,Share,Options*/}
         <View style={[styles.flexRow,{padding:5}]}>
-            <View style={[{width: 30}, styles.centeredView,styles.actionIcon]}>
+            <Animated.View style={[{
+              width: 30,
+              transform: [
+                {scale: opacity}
+              ],
+            }, styles.centeredView,styles.actionIcon]}>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  setLiked(!isLiked);
+                }}>
                 <Ionicons
-                    name={isLiked ? "md-heart" : "md-heart-empty"}
-                    size={30}
-                    color={isLiked ? Colors.heartIcon : Colors.tabIconSelected}
+                  name={isLiked ? "md-heart" : "md-heart-empty"}
+                  size={30}
+                  color={isLiked ? Colors.heartIcon : Colors.tabIconSelected}
                 />
-            </View>
+              </TouchableWithoutFeedback>
+            </Animated.View>
             <View style={[{width: 30}, styles.centeredView,styles.actionIcon]}>
                 <SimpleLineIcon
                     name={"bubble"}

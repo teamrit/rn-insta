@@ -7,6 +7,7 @@ export default {
   tabIconDefault: '#ccc',
   tabIconSelected: black,
   heartIcon: '#ff2e2e',
+  mediaHeart: '#f5f5f5',
   tabBar: '#fefefe',
   errorBackground: 'red',
   errorText: '#fff',
