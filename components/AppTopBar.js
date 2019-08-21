@@ -1,8 +1,9 @@
 import React from "react";
-import {View,Text,TouchableHighlight,TouchableOpacity} from "react-native";
+import {View,Image,TouchableOpacity} from "react-native";
 import {styles} from "../constants/Styles";
 import Colors from "../constants/Colors";
 import {Ionicons} from "@expo/vector-icons";
+import UnreadMessageCount from "./UnreadMessageCount";
 
 export const AppTopBar = () => {
   return (
@@ -17,29 +18,23 @@ export const AppTopBar = () => {
                   />
               </View>
           </TouchableOpacity>
-          <Text style={{padding:5,height:50,fontSize:20}}>
-              Instagram
-          </Text>
-          <View style={[{alignSelf: 'flex-end'},styles.flexRow,styles.appTopBar]}>
-              <TouchableHighlight style={[styles.appBarIcon, {alignItems: 'center'}]}>
-                  <View style={[styles.appBarIcon, {alignItems: 'center'}]}>
-                      <Ionicons
-                          name={"ios-jet"}
-                          size={30}
-                          color={Colors.tabIconSelected}
-                      />
-                  </View>
-              </TouchableHighlight>
-              <TouchableHighlight style={[styles.appBarIcon, {alignItems: 'center'}]}>
-                  <View style={[styles.appBarIcon, {alignItems: 'center'}]}>
-                      <Ionicons
-                          name={"ios-jet"}
-                          size={30}
-                          color={Colors.tabIconSelected}
-                      />
-                  </View>
-              </TouchableHighlight>
-          </View>
+          <Image
+            source={require("../assets/images/instagram-logo-cursive.jpg")}
+            resizeMode="contain"
+            style={[{padding:10,height:30,width:3.28 * 30,alignSelf:'center'}]} />
+          <View style={styles.flexGrow}/>
+          <TouchableOpacity style={[styles.appBarIcon, {alignItems: 'center'}]}>
+            <View style={[styles.appBarIcon, styles.centeredView]}>
+              <UnreadMessageCount/>
+              <Ionicons
+                name={"ios-paper-plane"}
+                size={30}
+                style={styles.centeredView}
+                color={Colors.tabIconSelected}
+              />
+            </View>
+          </TouchableOpacity>
+
       </View>
   )
 };

@@ -1,4 +1,5 @@
 import {Platform, StyleSheet} from "react-native";
+import Colors from "./Colors";
 
 export const styles = StyleSheet.create({
     container: {
@@ -153,6 +154,10 @@ export const styles = StyleSheet.create({
     actionIcon: {
         marginLeft: 5,
         marginRight: 5
+    },
+    timestamp: {
+        fontSize:10,
+        color: Colors.timestamp
     }
 });
 

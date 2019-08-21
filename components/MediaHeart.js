@@ -7,21 +7,24 @@ import { useState, useEffect } from 'react';
 
 export const useFadeInOut = ({ doAnimation, duration }) => {
   const [animation, setAnimation] = useState(new Animated.Value(0));
+  const [a,isLiked] = doAnimation;
 
   // Heart Animation
   useEffect(() => {
-    Animated.sequence([
-      // Heart Zoom
-      Animated.spring(animation, {
-        toValue: doAnimation ? 1 : 0,
-      }),
-      // HEART Fade
-      Animated.timing(animation, {
-        toValue: 0,
-        duration: 200
-      }),
-    ]).start();
-  }, [doAnimation]);
+    if (isLiked) {
+      Animated.sequence([
+        // Heart Zoom
+        Animated.spring(animation, {
+          toValue: 1,
+        }),
+        // HEART Fade
+        Animated.timing(animation, {
+          toValue: 0,
+          duration: 200
+        }),
+      ]).start();
+    }
+  }, doAnimation);
 
   return animation;
 };
@@ -36,14 +39,14 @@ export const useFadeInAnimation = ({ doAnimation, duration }) => {
         toValue: doAnimation ? 1 : 0,
         duration: 200
       })
-  }, [doAnimation]);
+  }, doAnimation);
 
   return animation;
 };
 
 export const MediaHeart = (props) => {
-  const {isLiked} = props;
-  const animation = useFadeInOut({ doAnimation: isLiked, duration: 1000 });
+  const {isLiked, isDoubleTapped} = props;
+  const animation = useFadeInOut({ doAnimation: [isDoubleTapped,isLiked], duration: 1000 });
   let opacity = animation.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 1],

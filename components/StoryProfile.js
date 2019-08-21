@@ -2,17 +2,7 @@ import React from "react";
 import {View,Text,Image} from "react-native";
 import {styles} from "../constants/Styles";
 
-export const names = ['David','Jon','Harry','Miller','Sas','Pop','Dog','Chap'];
-
-export const getRandomName = () => {
-    return names[Math.floor(Math.random()*names.length)];
-};
-
-export const generateAvatarUrl = () => {
-    return `https://api.adorable.io/avatars/400/${getRandomName()}@adorable.io.png`;
-};
-
-export const StoryProfile = ({username='',isStorySeen = false}) => {
+export const StoryProfile = ({username='',isStorySeen = false,avatarUrl=''}) => {
     const profileWidth = isStorySeen ? 54 : 60;
     return (
         <View style={{width:80}}>
@@ -20,7 +10,7 @@ export const StoryProfile = ({username='',isStorySeen = false}) => {
                 {/*{isStorySeen && (*/}
                 <Image
                     style={[{width: profileWidth,height:profileWidth,borderRadius:30}]}
-                    source={{uri: generateAvatarUrl()}}
+                    source={{uri: avatarUrl}}
                 />
                 {/*)}*/}
             </View>

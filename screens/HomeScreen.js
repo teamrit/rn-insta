@@ -1,40 +1,49 @@
 import React , {useEffect} from 'react';
-import {FlatList, ScrollView, Text, View,} from 'react-native';
+import {FlatList, ScrollView, Text, View, RefreshControl} from 'react-native';
 import {styles} from "../constants/Styles";
 import {StatusBarGap} from "../components/StatusBarGap";
 import {AppTopBar} from "../components/AppTopBar";
 import {StoriesContainer} from "../components/StoriesContainer";
 import {FeedPost} from "../components/FeedPost";
 import {connect} from 'react-redux';
-import {loadRandomPosts} from "../redux/actions/FeedActions";
+import {loadRandomPosts, loadRandomStories} from "../redux/actions/FeedActions";
 
 function HomeFeedScreen(props) {
-  let {posts} = props || [];
-  posts = posts[0] || [];
-  console.log(posts.length,posts[0]);
+
+  const [refresh, setRefresh] = React.useState(false);
+
+  let {posts, stories} = props || {};
+
   useEffect(() => {
     // Mount code
+    props.loadStories();
     props.loadPosts();
-
-    return () => {
-
-    }
   }, []);
 
   return (
     <View style={styles.container}>
       <StatusBarGap />
         <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={()=>{
+                setRefresh(true);
+                props.loadPosts();
+                setInterval(() => setRefresh(false), 500);
+              }}
+            />
+          }
           styles={styles.container}
-          showsHorizontalScrollIndicator={false} >
+          showsVerticalScrollIndicator={false}>
             <AppTopBar />
-            <StoriesContainer/>
+            <StoriesContainer stories={stories} />
           {posts &&
             <FlatList
               data={posts}
               style={styles.container}
               keyExtractor={(item) => {
-                return item.key+''
+                return Date.now()+item.key+''
               }}
               renderItem={({item}) =>
                 <FeedPost
@@ -42,6 +51,9 @@ function HomeFeedScreen(props) {
                   isStorySeen={item.isStorySeen}
                   username={item.name || ""}
                   imageUrl={item.imageUrl || ""}
+                  caption={item.caption || ""}
+                  numberOfComments={item.numberOfComments || 0}
+                  timestamp={item.timestamp}
                 />}
             />
           }
@@ -55,4 +67,7 @@ HomeFeedScreen.navigationOptions = {
   header: null,
 };
 
-export default connect((state => state.feed), {loadPosts: loadRandomPosts})(HomeFeedScreen);
+export default connect((state => state.feed), {
+  loadPosts: loadRandomPosts,
+  loadStories: loadRandomStories
+})(HomeFeedScreen);

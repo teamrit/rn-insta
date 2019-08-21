@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {View, Text, Image,TouchableWithoutFeedback, Animated} from "react-native";
 import {styles} from "../constants/Styles";
-import {generateAvatarUrl} from "./StoryProfile";
 import Colors from "../constants/Colors";
 import {Ionicons} from "@expo/vector-icons";
 import SimpleLineIcon from "@expo/vector-icons/SimpleLineIcons";
 import Layout from "../constants/Layout";
-import {MediaHeart, useFadeInAnimation, useFadeInOut} from "./MediaHeart";
+import {MediaHeart, useFadeInAnimation} from "./MediaHeart";
+import {generateRandomAvatarUrl} from "../constants/DataGenerator";
 
 const StoryProfile = ({username='',isStorySeen = false}) => {
     const profileWidth = isStorySeen ? 27 : 30;
@@ -15,17 +15,19 @@ const StoryProfile = ({username='',isStorySeen = false}) => {
             <View style={[{height:30,width:30,borderRadius:30,marginLeft:10,marginRight:10},isStorySeen && styles.storySeen]}>
                 <Image
                     style={[{width: profileWidth,height:profileWidth,borderRadius:30}]}
-                    source={{uri: generateAvatarUrl()}}
+                    source={{uri: generateRandomAvatarUrl()}}
                 />
             </View>
         </View>
     )
 };
 
-export const FeedPost = ({location='',username='',imageUrl=''}) => {
+export const FeedPost = ({location='',username='',imageUrl='',caption='',numberOfComments=0,timestamp=''}) => {
     // State
     const [lastImagePress, setLikeTime] = useState(null);
     const [isLiked, setLiked] = useState(false);
+    const [isDoubleTapped, setImageTapped] = useState(null);
+    const [isCaptionShowed, setCaptionVisibility] = useState(false);
 
     const animation = useFadeInAnimation({ doAnimation: isLiked, duration: 1000 });
     let opacity = animation.interpolate({
@@ -34,7 +36,9 @@ export const FeedPost = ({location='',username='',imageUrl=''}) => {
     });
 
     const handleImageDoublePress = () => {
-        setLiked(true);
+        // isDoubleTapped
+      setImageTapped(!isDoubleTapped);
+      setLiked(true);
     };
 
     return <View>
@@ -69,7 +73,7 @@ export const FeedPost = ({location='',username='',imageUrl=''}) => {
               }
             }}>
               <View>
-                <MediaHeart isLiked={isLiked}/>
+                <MediaHeart isDoubleTapped={isDoubleTapped} isLiked={isLiked}/>
                 <Image
                   source={{uri: imageUrl}}
                   style={{width: Layout.window.width,height:Layout.window.width}}
@@ -120,6 +124,24 @@ export const FeedPost = ({location='',username='',imageUrl=''}) => {
                     color={Colors.tabIconSelected}
                 />
             </View>
+        </View>
+
+        {/*Like Counts, Captions, Comments*/}
+        <View style={[{paddingLeft:15,paddingRight:15}]}>
+          <Text>
+            <Text style={[styles.feedUserName, styles.textBold, {alignSelf: 'flex-start'}]}>{username || ''}</Text>
+            <Text>{"  "}</Text>
+            <Text>{isCaptionShowed ? caption : caption.substring(0,40)}</Text>
+            <TouchableWithoutFeedback onPress={()=>setCaptionVisibility(true)}>
+              <Text style={{color:Colors.readMoreCaption}}>{isCaptionShowed ? "" : "...more"}</Text>
+            </TouchableWithoutFeedback>
+          </Text>
+          <TouchableWithoutFeedback onPress={()=>setCaptionVisibility(true)}>
+            <Text style={{color:Colors.readMoreCaption}}>
+              {`View all ${numberOfComments} comments`}
+            </Text>
+          </TouchableWithoutFeedback>
+          <Text style={styles.timestamp}>{timestamp}</Text>
         </View>
     </View>
 };

@@ -10,7 +10,7 @@ export const getRandomUsername = () => {
 };
 
 // Source: https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
-function getRandomInt(min, max) {
+export function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -22,7 +22,8 @@ export const getRandomStories = () => {
         .map((a,index) => ({
             key: index,
             name: getRandomUsername(),
-            isStorySeen: getRandomBoolean()
+            isStorySeen: getRandomBoolean(),
+            avatarUrl: generateRandomAvatarUrl()
         }))
         .sort(s => {
             // Shows the unseen stories first
@@ -38,12 +39,28 @@ export const getRandomPosts = () => {
             name: getRandomUsername(),
             isStorySeen: getRandomBoolean(),
             location: getRandomLocationName(),
-            imageUrl: getRandomPostUrl()
+            imageUrl: getRandomPostUrl(),
+            caption: getRandomCaption(),
+            numberOfComments: getRandomInt(0,1500),
+            timestamp: `${getRandomInt(2,30)} ${getRandomTimeUnit()}s ago`
         }));
 };
 
+export function getRandomCaption() {
+  return faker.lorem.paragraphs();
+}
+
+export function getRandomTimeUnit() {
+  let options = ['hour','minute','second'];
+  return options[Math.floor(Math.random()*options.length)];
+}
+
 export const getRandomLocationName = () => {
     return `${faker.address.city()}, ${faker.address.state()}`;
+};
+
+export const generateRandomAvatarUrl = () => {
+  return `https://api.adorable.io/avatars/400/${faker.name.findName()}@adorable.io.png`;
 };
 
 export const getRandomPostUrl = () => {

@@ -1,16 +1,24 @@
 import {FEED} from "../Constants";
 
 const initialState = {
-    posts: []
+    posts: [],
+    stories: []
 };
 
 function userReducer(state = initialState, action) {
     switch (action.type) {
         case FEED.POSTS.GET : {
             return {
-                posts: [...initialState.posts, action.payload]
+              ...state,
+              posts: [...initialState.posts, ...action.payload]
             }
         }
+      case FEED.STORIES.GET : {
+          return {
+            ...state,
+            stories: [...action.payload]
+          }
+      }
         default:
             return state
     }
