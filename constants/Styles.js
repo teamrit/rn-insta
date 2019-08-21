@@ -129,6 +129,30 @@ export const styles = StyleSheet.create({
     storySeen: {
         borderWidth:0.25,
         padding:2.75
+    },
+    textBold: {
+        fontWeight: 'bold'
+    },
+    chocoHeight: {
+        height:50
+    },
+    chocoWidth: {
+        width:50
+    },
+    feedUserName: {
+        fontSize:15,
+        textAlign:'left'
+    },
+    feedUserLocation: {
+        fontSize:11,
+        textAlign:'left'
+    },
+    flexGrow: {
+        flexGrow: 1
+    },
+    actionIcon: {
+        marginLeft: 5,
+        marginRight: 5
     }
 });
 
