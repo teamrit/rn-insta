@@ -1,33 +1,34 @@
 import React, {useState} from "react";
-import {View, Text, Image,TouchableWithoutFeedback, Animated} from "react-native";
+import {View, Text, Image,TouchableWithoutFeedback, Animated, Modal} from "react-native";
 import {styles} from "../constants/Styles";
 import Colors from "../constants/Colors";
 import {Ionicons} from "@expo/vector-icons";
 import SimpleLineIcon from "@expo/vector-icons/SimpleLineIcons";
 import Layout from "../constants/Layout";
 import {MediaHeart, useFadeInAnimation} from "./MediaHeart";
-import {generateRandomAvatarUrl} from "../constants/DataGenerator";
+import {SharePost} from "./SharePost";
 
-const StoryProfile = ({username='',isStorySeen = false}) => {
+const StoryProfile = ({username='',isStorySeen = false,avatarUrl=''}) => {
     const profileWidth = isStorySeen ? 27 : 30;
     return (
         <View style={{width:35}}>
             <View style={[{height:30,width:30,borderRadius:30,marginLeft:10,marginRight:10},isStorySeen && styles.storySeen]}>
                 <Image
                     style={[{width: profileWidth,height:profileWidth,borderRadius:30}]}
-                    source={{uri: generateRandomAvatarUrl()}}
+                    source={{uri: avatarUrl}}
                 />
             </View>
         </View>
     )
 };
 
-export const FeedPost = ({location='',username='',imageUrl='',caption='',numberOfComments=0,timestamp=''}) => {
+export const FeedPost = ({location='',username='',imageUrl='',caption='',numberOfComments=0,timestamp='',avatarUrl=''}) => {
     // State
     const [lastImagePress, setLikeTime] = useState(null);
     const [isLiked, setLiked] = useState(false);
     const [isDoubleTapped, setImageTapped] = useState(null);
     const [isCaptionShowed, setCaptionVisibility] = useState(false);
+    const [isShareModalOpened, setModalVisibility] = useState(false);
 
     const animation = useFadeInAnimation({ doAnimation: isLiked, duration: 1000 });
     let opacity = animation.interpolate({
@@ -44,8 +45,12 @@ export const FeedPost = ({location='',username='',imageUrl='',caption='',numberO
     return <View>
         {/*Post Header*/}
         <View style={[styles.flexRow, {height: 50, padding: 5}]}>
+            <SharePost
+              setModalVisibility={setModalVisibility}
+              isShareModalOpened={isShareModalOpened}
+            />
             <View style={[styles.centeredView, {marginRight: 15}]}>
-                <StoryProfile />
+                <StoryProfile avatarUrl={avatarUrl} />
             </View>
             <View style={[styles.flexGrow, styles.flexColumn, {paddingTop: 3, paddingBottom: 3}]}>
                 <Text style={[styles.feedUserName, styles.textBold, {alignSelf: 'flex-start'}]}>{username || ''}</Text>
@@ -110,13 +115,18 @@ export const FeedPost = ({location='',username='',imageUrl='',caption='',numberO
                 />
             </View>
             <View style={[{width: 30}, styles.centeredView,styles.actionIcon]}>
+              <TouchableWithoutFeedback onPress={()=>setModalVisibility(true)}>
                 <Ionicons
-                    name={"md-paper-plane"}
-                    size={30}
-                    color={Colors.tabIconSelected}
+                  name={"md-paper-plane"}
+                  size={30}
+                  color={Colors.tabIconSelected}
                 />
+              </TouchableWithoutFeedback>
             </View>
+
             <View style={styles.flexGrow}/>
+
+            {/*Right*/}
             <View style={[{width: 30}, styles.centeredView,styles.actionIcon]}>
                 <Ionicons
                     name={"md-bookmark"}

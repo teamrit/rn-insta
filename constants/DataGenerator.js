@@ -23,7 +23,7 @@ export const getRandomStories = () => {
             key: index,
             name: getRandomUsername(),
             isStorySeen: getRandomBoolean(),
-            avatarUrl: generateRandomAvatarUrl()
+            avatarUrl: getRandomAvatarUrl()
         }))
         .sort(s => {
             // Shows the unseen stories first
@@ -42,6 +42,7 @@ export const getRandomPosts = () => {
             imageUrl: getRandomPostUrl(),
             caption: getRandomCaption(),
             numberOfComments: getRandomInt(0,1500),
+            avatarUrl: getRandomAvatarUrl(),
             timestamp: `${getRandomInt(2,30)} ${getRandomTimeUnit()}s ago`
         }));
 };
@@ -59,7 +60,7 @@ export const getRandomLocationName = () => {
     return `${faker.address.city()}, ${faker.address.state()}`;
 };
 
-export const generateRandomAvatarUrl = () => {
+export const getRandomAvatarUrl = () => {
   return `https://api.adorable.io/avatars/400/${faker.name.findName()}@adorable.io.png`;
 };
 

@@ -158,6 +158,12 @@ export const styles = StyleSheet.create({
     timestamp: {
         fontSize:10,
         color: Colors.timestamp
+    },
+    translucent: {
+        backgroundColor: Colors.translucent
+    },
+    roundedPretty: {
+        borderRadius: 15
     }
 });
 

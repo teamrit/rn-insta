@@ -54,6 +54,7 @@ function HomeFeedScreen(props) {
                   caption={item.caption || ""}
                   numberOfComments={item.numberOfComments || 0}
                   timestamp={item.timestamp}
+                  avatarUrl={item.avatarUrl}
                 />}
             />
           }
