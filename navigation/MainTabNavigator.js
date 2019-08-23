@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import ExampleComponent from '../screens/LinksScreen';
+import FrictionModal from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -35,7 +35,7 @@ HomeStack.path = '';
 // STACK: Link
 const NotificationsStack = createStackNavigator(
   {
-    Links: ExampleComponent,
+    Links: FrictionModal,
   },
   config
 );

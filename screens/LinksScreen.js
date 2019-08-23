@@ -1,114 +1,145 @@
 import React from 'react';
-import { PanResponder, Animated, View,Easing} from 'react-native';
+import { PanResponder, Animated, View, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import Layout from "../constants/Layout";
 import {styles} from "../constants/Styles";
 import Colors from "../constants/Colors";
 
-class ExampleComponent extends React.Component {
+class FrictionModal extends React.Component {
   constructor(props) {
-
     super(props);
-
     this.topSpace = new Animated.Value(0);
+
+    this.state = {
+      modalExpanded: false
+    };
 
     this._panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => Math.abs(gestureState.dy) > 30,
 
-      onPanResponderGrant: (evt, gestureState) => {
-        // The gesture has started. Show visual feedback so the user knows
-        // what is happening!
-        // gestureState.d{x,y} will be set to zero now
-      },
+      // TODO: Add velocity to consideration. It is an important part of "Force" of a swipe.
+
       onPanResponderMove: (evt, gestureState) => {
-        // The most recent move distance is gestureState.move{X,Y}
-        // The accumulated gesture distance since becoming responder is
-        // gestureState.d{x,y}
 
-        let currentValue = this.topSpace._value;
         let deltaY = gestureState.dy;
 
-
-        console.log("C" + currentValue);
-        console.log("Dy" + deltaY);
-
-        if (this.topSpace._value !== Layout.window.height * 0.35) {
+        // Modal Not Fully Expanded Yet
+        if (!(this.state.modalExpanded)) {
           this.topSpace.setValue(-1 * deltaY);
-        } else if (gestureState.dy > 0) {
-          console.log("Swipe down")
-          this.topSpace.setValue(gestureState.dy);
         }
-
-
+        else if (gestureState.dy > 0) {
+          this.topSpace.setValue(Layout.window.height * 0.35 - deltaY);
+        }
       },
-
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
 
       onPanResponderRelease: (evt, gestureState) => {
 
         const {dy} = gestureState;
 
-        if (dy < -100) {
-          // Animated.timing(this.topSpace, {
-          //   toValue: ,
-          //   easing: Easing.in,
-          //   duration: 500,
-          // }).start();
-          Animated.spring(this.topSpace, {
-            toValue: Layout.window.height * 0.35, // return to start
-          }).start()
+        if (!(this.state.modalExpanded)) {
+          // Enough force applied to expand to full height
+          if (dy < -100) {
+            Animated.spring(this.topSpace, {
+              toValue: Layout.window.height * 0.35, // return to start
+            }).start();
+            this.setState({modalExpanded: true});
+          } else if (dy > 100) {
+
+            // Swipe Down with "force" to close modal
+
+            props.onForcedDownSwipe && props.onForcedDownSwipe();
+
+            Animated.spring(this.topSpace, {
+              toValue: 0, // return to start
+            }).start();
+            this.setState({modalExpanded: false});
+          } else {
+          // Not pulled with enough "FORCE"
+            Animated.spring(this.topSpace, {
+              toValue: 0, // return to start
+            }).start()
+          }
         } else {
-          Animated.spring(this.topSpace, {
-            toValue: 0, // return to start
-          }).start()
+          if (dy > 100) {
+            Animated.spring(this.topSpace, {
+              toValue: 0, // return to start
+            }).start();
+            this.setState({modalExpanded: false});
+          } else {
+            // Not pulled with enough "FORCE"
+            Animated.spring(this.topSpace, {
+              toValue: Layout.window.height * 0.35, // return to start
+            }).start()
+          }
         }
-      },
-      onPanResponderTerminate: (evt, gestureState) => {
-        // Another component has become the responder, so this gesture
-        // should be cancelled
-      },
-      onShouldBlockNativeResponder: (evt, gestureState) => {
-        // Returns whether this component should block native components from becoming the JS
-        // responder. Returns true by default. Is currently only supported on android.
-        return true;
-      },
+      }
     });
   }
+
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this.expandFullModal,
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide,
+    );
+  }
+
+  _keyboardDidHide = () => {
+    Animated.spring(this.topSpace, {
+      toValue: 0, // return to start
+    }).start();
+    this.setState({modalExpanded: false});
+  };
+
+  // An arrow function is used here so that "this" refers to the component, and not the Keyboard inner context of this
+  expandFullModal = () => {
+    Animated.spring(this.topSpace, {
+      toValue: Layout.window.height * 0.35, // return to start
+    }).start();
+    this.setState({modalExpanded: true});
+  };
 
   render() {
     const {height,width} = Layout.window;
     let _height = Animated.add(height * 0.65, this.topSpace);
 
+    // Interpolate border radius of share item
+    const borderRadius = this.topSpace.interpolate({
+      inputRange: [0, height * 0.35],
+      outputRange: [10, 0],
+    });
+
     return <Animated.View
-      style={[{width,height},styles.b1]}
+      style={[{width,height},styles.translucent]}
       {...this._panResponder.panHandlers} >
-      <View style={styles.flexGrow} />
+      <View style={[styles.flexGrow]} >
+        <TouchableWithoutFeedback onPress={()=>this.props.onForcedDownSwipe()}>
+          <View/>
+        </TouchableWithoutFeedback>
+      </View>
       <Animated.View
         style={{
           height:_height,
           width:width,
           alignSelf: 'flex-end',
-          backgroundColor: Colors.warningBackground}} />
+          backgroundColor: Colors.errorText,
+          borderRadius
+        }} >
+        {this.props.children}
+      </Animated.View>
     </Animated.View>;
   }
 }
 
-class GestureTester extends React.Component {
-  render() {
-    return (
-      <View style={{width:Layout.window.width,height:Layout.window.height}}>
-        <ExampleComponent
-        />
-      </View>
-    );
-  }
-}
+export default FrictionModal;
 
-export default GestureTester;
-
-GestureTester.navigationOptions = {
+FrictionModal.navigationOptions = {
   title: 'Links',
 };

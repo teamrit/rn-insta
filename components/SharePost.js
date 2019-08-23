@@ -1,48 +1,35 @@
 import React from "react";
-import {Modal,TouchableHighlight,View,Text,TouchableWithoutFeedback} from "react-native";
-import {styles} from "../constants/Styles";
-import layout from "../constants/Layout";
+import {Modal,View, Image,TextInput} from "react-native";
+import FrictionModal from '../screens/LinksScreen';
 import Colors from "../constants/Colors";
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import {styles} from "../constants/Styles";
 
-export const SharePost = ({isShareModalOpened,setModalVisibility}) => {
-
-  const config = {
-    velocityThreshold: 0.3,
-    directionalOffsetThreshold: 80
-  };
-
+export const SharePost = ({isShareModalOpened,setModalVisibility,imageUrl}) => {
   return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={isShareModalOpened}
       onRequestClose={() => setModalVisibility(false)}>
-      <View style={styles.translucent}>
-        <View style={[{height:layout.window.height * 0.3},styles.translucent]}>
-          <TouchableWithoutFeedback style={styles.flexed}
-            onPress={() => setModalVisibility(false)}
-          >
-            <View style={styles.flexed}/>
-          </TouchableWithoutFeedback>
+      <FrictionModal
+        something={"something"}
+        onForcedDownSwipe={() => setModalVisibility(false)} >
+        <View>
+          <View style={{
+            height:5,width:50,backgroundColor:Colors.readMoreCaption,borderRadius:20,
+            alignSelf:'center',
+            margin:10
+          }}/>
+          <View style={styles.flexColumn}>
+            <View>
+              <Image source={{uri:imageUrl}} style={{width:50,height:50,margin:20,borderRadius:10}} />
+            </View>
+            <View style={styles.flexGrow}>
+              <TextInput value={"something"} editable={true} style={{padding:5,borderWidth:1,zIndex:25}} />
+            </View>
+          </View>
         </View>
-        <View style={[
-          {height:layout.window.height * 0.7,backgroundColor:Colors.errorText,padding:20},
-          styles.roundedPretty
-        ]}>
-          <GestureRecognizer
-            config={config}
-            onSwipeUp={(evt) => console.log(evt)}
-          >
-            <Text>Hello World!</Text>
-            <TouchableHighlight
-              onPress={()=>setModalVisibility(false)}>
-              <Text>Hide Modal</Text>
-            </TouchableHighlight>
-          </GestureRecognizer>
-
-        </View>
-      </View>
+      </FrictionModal>
     </Modal>
   );
 };

@@ -45,9 +45,12 @@ export const FeedPost = ({location='',username='',imageUrl='',caption='',numberO
     return <View>
         {/*Post Header*/}
         <View style={[styles.flexRow, {height: 50, padding: 5}]}>
+
+            {/*Friction Modal goes here*/}
             <SharePost
               setModalVisibility={setModalVisibility}
               isShareModalOpened={isShareModalOpened}
+              imageUrl={imageUrl}
             />
             <View style={[styles.centeredView, {marginRight: 15}]}>
                 <StoryProfile avatarUrl={avatarUrl} />
