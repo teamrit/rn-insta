@@ -5,10 +5,10 @@ import Colors from "../constants/Colors";
 import {Ionicons} from "@expo/vector-icons";
 import UnreadMessageCount from "./UnreadMessageCount";
 
-export const AppTopBar = () => {
+export const AppTopBar = ({onCameraPress}) => {
   return (
       <View style={[styles.appTopBar,styles.shadow,styles.bgCloud,{flexDirection: 'row'}]}>
-          <TouchableOpacity style={[styles.appBarIcon, {alignItems: 'center'}]}>
+          <TouchableOpacity onPress={onCameraPress} style={[styles.appBarIcon, {alignItems: 'center'}]}>
               <View style={[styles.appBarIcon, styles.centeredView]}>
                   <Ionicons
                       name={"ios-camera"}
@@ -34,7 +34,6 @@ export const AppTopBar = () => {
               />
             </View>
           </TouchableOpacity>
-
       </View>
   )
 };
