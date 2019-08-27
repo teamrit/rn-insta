@@ -19,7 +19,13 @@ class FrictionModal extends React.Component {
       onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => Math.abs(gestureState.dy) > 30,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+        console.log(this.state.modalExpanded, gestureState.dy);
+        if (this.state.modalExpanded) {
+          return false;
+        }
+        return Math.abs(gestureState.dy) > 30 && Math.abs(gestureState.dx) > 30
+      },
 
       // TODO: Add velocity to consideration. It is an important part of "Force" of a swipe.
 
@@ -106,6 +112,11 @@ class FrictionModal extends React.Component {
     this.setState({modalExpanded: true});
   };
 
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
   render() {
     const {height,width} = Layout.window;
     let _height = Animated.add(height * 0.65, this.topSpace);
@@ -113,7 +124,7 @@ class FrictionModal extends React.Component {
     // Interpolate border radius of share item
     const borderRadius = this.topSpace.interpolate({
       inputRange: [0, height * 0.35],
-      outputRange: [10, 0],
+      outputRange: [20, 0],
     });
 
     return <Animated.View

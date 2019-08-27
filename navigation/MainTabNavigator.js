@@ -5,6 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import FrictionModal from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import CameraExample from "../components/Camera";
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -24,7 +25,7 @@ HomeStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-home${focused ? '' : '-outline'}`
+          ? `ios-home`
           : 'md-home'
       }
     />

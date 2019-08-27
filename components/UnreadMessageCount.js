@@ -14,7 +14,7 @@ export default function () {
       },
       styles.centeredView
     ]}>
-      <Text style={{color:Colors.noticeText}}>{getRandomInt(1,9)}</Text>
+      <Text style={{color:Colors.white}}>{getRandomInt(1,9)}</Text>
     </View>
   );
 }

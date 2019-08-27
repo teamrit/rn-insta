@@ -1,5 +1,5 @@
 import React , {useEffect} from 'react';
-import {FlatList, ScrollView, Text, View, RefreshControl} from 'react-native';
+import {FlatList, ScrollView, SafeAreaView, View, RefreshControl} from 'react-native';
 import {styles} from "../constants/Styles";
 import {StatusBarGap} from "../components/StatusBarGap";
 import {AppTopBar} from "../components/AppTopBar";
@@ -13,6 +13,8 @@ function HomeFeedScreen(props) {
   const [refresh, setRefresh] = React.useState(false);
 
   let {posts, stories} = props || {};
+  const {navigation} = props;
+  console.log(navigation);
 
   useEffect(() => {
     // Mount code
@@ -23,6 +25,7 @@ function HomeFeedScreen(props) {
   return (
     <View style={styles.container}>
       <StatusBarGap />
+      <SafeAreaView >
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -36,30 +39,35 @@ function HomeFeedScreen(props) {
           }
           styles={styles.container}
           showsVerticalScrollIndicator={false}>
-            <AppTopBar />
-            <StoriesContainer stories={stories} />
+          <AppTopBar onCameraPress={()=> {
+            const {navigate,state} = props.navigation;
+            navigate('Camera', { go_back_key: state.key })
+          }} />
+          <StoriesContainer stories={stories} />
           {posts &&
-            <FlatList
-              data={posts}
-              style={styles.container}
-              keyExtractor={(item) => {
-                return Date.now()+item.key+''
-              }}
-              renderItem={({item}) =>
-                <FeedPost
-                  location={item.location}
-                  isStorySeen={item.isStorySeen}
-                  username={item.name || ""}
-                  imageUrl={item.imageUrl || ""}
-                  caption={item.caption || ""}
-                  numberOfComments={item.numberOfComments || 0}
-                  timestamp={item.timestamp}
-                  avatarUrl={item.avatarUrl}
-                />}
-            />
+          <FlatList
+            data={posts}
+            style={styles.container}
+            keyExtractor={(item) => {
+              return Date.now()+item.key+''
+            }}
+            renderItem={({item}) =>
+              <FeedPost
+                location={item.location}
+                isStorySeen={item.isStorySeen}
+                username={item.name || ""}
+                imageUrl={item.imageUrl || ""}
+                caption={item.caption || ""}
+                numberOfComments={item.numberOfComments || 0}
+                timestamp={item.timestamp}
+                avatarUrl={item.avatarUrl}
+              />}
+          />
           }
 
         </ScrollView>
+      </SafeAreaView>
+
     </View>
   );
 }

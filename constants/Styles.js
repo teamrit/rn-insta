@@ -164,6 +164,42 @@ export const styles = StyleSheet.create({
     },
     roundedPretty: {
         borderRadius: 15
+    },
+    mediaShareThumbnail: {
+      paddingTop:5,
+      paddingBottom:5,
+      height:50,
+      zIndex:25
+    },
+    mediaShareSearchContainer: {
+      margin:15,
+      padding:5,
+      borderWidth:1,
+      borderColor:Colors.readMoreCaption,
+      borderRadius:3
+    },
+    divider: {
+      borderBottomWidth:0.5,
+      borderBottomColor:'#d3d3d3'
+    },
+    p1 : {
+        padding:5
+    },
+    p2 : {
+        padding:10
+    },
+    p3 : {
+        padding:15
+    },
+    p4 : {
+        padding:20
+    },
+    captureButton : {
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+        backgroundColor: Colors.white
     }
+
 });
 
