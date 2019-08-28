@@ -1,12 +1,11 @@
 import React from 'react';
-import { Text, View, TouchableOpacity , SafeAreaView , Image } from 'react-native';
+import { Text, View, TouchableOpacity , SafeAreaView , Image , StatusBar } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import {styles} from "../constants/Styles";
 import {Ionicons} from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import Layout from "../constants/Layout";
-import { NavigationActions } from 'react-navigation';
 
 export function CameraActionButton(props) {
   return (<TouchableOpacity
@@ -68,6 +67,7 @@ export default class CameraExample extends React.Component {
       return (
         <View style={{ flex: 1 }}>
           <SafeAreaView style={{ flex: 1 }}>
+            <StatusBar hidden={true} />
 
             {
               this.state.imageSource &&
@@ -106,12 +106,7 @@ export default class CameraExample extends React.Component {
 
                 <TouchableOpacity onPress={()=> {
                   const { state, goBack , navigate } = this.props.navigation;
-                  const params = state.params || {};
-                  console.log(params);
                   navigate('Home');
-                  // this.props.navigation.dispatch(NavigationActions.back({
-                  //   key: params.go_back_key
-                  // }))
                 }}>
                   <Ionicons
                     name={"md-arrow-dropright"}

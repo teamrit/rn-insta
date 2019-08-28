@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {Provider} from "react-redux";
 import store from "./redux/Store";
 import AppNavigator from './navigation/AppNavigator';
+import {styles} from "./constants/Styles";
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -56,10 +57,3 @@ function handleLoadingError(error) {
 function handleFinishLoading(setLoadingComplete) {
   setLoadingComplete(true);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

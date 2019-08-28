@@ -3,13 +3,18 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import FrictionModal from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import CameraExample from "../components/Camera";
+import FrictionModal from '../screens/FrictionModal';
+import SettingsScreen from '../screens/CameraScreen';
+import SearchScreen from "../screens/SearchScreen";
+import {ExploreScreen} from "../screens/ExploreScreen";
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
-  default: {},
+  default: {
+    navigationOptions: {
+      header: null
+    }
+  },
 });
 
 // STACK: Home
@@ -49,38 +54,39 @@ NotificationsStack.navigationOptions = {
 NotificationsStack.path = '';
 
 // STACK: Settings
-const SettingsStack = createStackNavigator(
+const ProfileStack = createStackNavigator(
   {
-    Settsings: SettingsScreen,
+    Settings: SettingsScreen,
   },
   config
 );
-SettingsStack.navigationOptions = {
+ProfileStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'} />
   ),
 };
-SettingsStack.path = '';
+ProfileStack.path = '';
 
 // STACK: Search
-const SearchStack = createStackNavigator(
+const ExploreStack = createStackNavigator(
     {
-        Settings: SettingsScreen,
+      Home: ExploreScreen,
     },
     config
 );
 
-SearchStack.navigationOptions = {
+ExploreStack.navigationOptions = {
+    header:null,
     tabBarIcon: ({ focused }) => (
         <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'} />
     ),
 };
 
-SearchStack.path = '';
+ExploreStack.path = '';
 
 const AddMediaStack = createStackNavigator(
     {
-        Settings: SettingsScreen,
+        Settings: SearchScreen,
     },
     config
 );
@@ -96,10 +102,10 @@ AddMediaStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  SearchStack,
+  ExploreStack,
   AddMediaStack,
   NotificationsStack,
-  SettingsStack,
+  SettingsStack: ProfileStack,
 }, {
     tabBarOptions: {
         showLabel: false

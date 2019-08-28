@@ -1,5 +1,6 @@
 import {Platform, StyleSheet} from "react-native";
 import Colors from "./Colors";
+import Layout from "./Layout";
 
 export const styles = StyleSheet.create({
     container: {
@@ -100,8 +101,24 @@ export const styles = StyleSheet.create({
     },
     b1: {
         borderWidth: 2,
-        borderColor: 'black'
+        borderColor: Colors.black
     },
+      ebl1 : {
+        borderLeftWidth: 1,
+        borderColor: Colors.white
+      },
+      ebr1 : {
+        borderRightWidth: 1,
+        borderColor: Colors.white
+      },
+      ebt1 : {
+        borderTopWidth: 1,
+        borderColor: Colors.white
+      },
+      ebb1 : {
+        borderBottomWidth: 1,
+        borderColor: Colors.white
+      },
     centeredView: {
         justifyContent: 'space-around',
         alignItems: 'center'
@@ -199,6 +216,12 @@ export const styles = StyleSheet.create({
         width: 40,
         borderRadius: 20,
         backgroundColor: Colors.white
+    },
+    h33: {
+        height: Layout.window.width/3
+    },
+    w33: {
+        width: Layout.window.width/3
     }
 
 });

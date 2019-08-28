@@ -1,6 +1,6 @@
 import React from "react";
 import {Modal,View, Image,TextInput,Button,Text,ScrollView} from "react-native";
-import FrictionModal from '../screens/LinksScreen';
+import FrictionModal from '../screens/FrictionModal';
 import Colors from "../constants/Colors";
 import {styles} from "../constants/Styles";
 import {SHARE_POST_PLACEHOLDER, SHARE_POST_SEARCH_PLACEHOLDER} from "../constants/App";

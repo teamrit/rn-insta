@@ -1,5 +1,5 @@
 import React from 'react';
-import { PanResponder, Animated, View, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { PanResponder, Animated, View , Text, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import Layout from "../constants/Layout";
 import {styles} from "../constants/Styles";
 import Colors from "../constants/Colors";
@@ -143,6 +143,9 @@ class FrictionModal extends React.Component {
           backgroundColor: Colors.errorText,
           borderRadius
         }} >
+        <Text>
+          {this.state.modalExpanded.toString()}
+        </Text>
         {this.props.children}
       </Animated.View>
     </Animated.View>;

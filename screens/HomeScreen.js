@@ -13,8 +13,6 @@ function HomeFeedScreen(props) {
   const [refresh, setRefresh] = React.useState(false);
 
   let {posts, stories} = props || {};
-  const {navigation} = props;
-  console.log(navigation);
 
   useEffect(() => {
     // Mount code
@@ -26,6 +24,11 @@ function HomeFeedScreen(props) {
     <View style={styles.container}>
       <StatusBarGap />
       <SafeAreaView >
+        <AppTopBar onCameraPress={()=> {
+          const {navigate,state} = props.navigation;
+          navigate('Camera', { go_back_key: state.key })
+        }} />
+
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -39,10 +42,7 @@ function HomeFeedScreen(props) {
           }
           styles={styles.container}
           showsVerticalScrollIndicator={false}>
-          <AppTopBar onCameraPress={()=> {
-            const {navigate,state} = props.navigation;
-            navigate('Camera', { go_back_key: state.key })
-          }} />
+
           <StoriesContainer stories={stories} />
           {posts &&
           <FlatList
