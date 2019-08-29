@@ -6,7 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import FrictionModal from '../screens/FrictionModal';
 import SettingsScreen from '../screens/CameraScreen';
 import SearchScreen from "../screens/SearchScreen";
-import {ExploreScreen} from "../screens/ExploreScreen";
+import ExploreScreen from "../screens/ExploreScreen";
 
 const config = Platform.select({
   web: { headerMode: 'screen' },

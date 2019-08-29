@@ -37,7 +37,6 @@ export default class CameraExample extends React.Component {
       let photo = await this.camera.takePictureAsync({
         quality:1,
         onPictureSaved:(data) => {
-          console.log(data);
           this.setState({imageSource: data.uri});
         }
       });

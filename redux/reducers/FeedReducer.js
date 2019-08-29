@@ -2,7 +2,8 @@ import {FEED} from "../Constants";
 
 const initialState = {
     posts: [],
-    stories: []
+    stories: [],
+    explore: []
 };
 
 function userReducer(state = initialState, action) {
@@ -10,7 +11,7 @@ function userReducer(state = initialState, action) {
         case FEED.POSTS.GET : {
             return {
               ...state,
-              posts: [...initialState.posts, ...action.payload]
+              posts: [...state.posts,...action.payload]
             }
         }
       case FEED.STORIES.GET : {
@@ -18,6 +19,12 @@ function userReducer(state = initialState, action) {
             ...state,
             stories: [...action.payload]
           }
+      }
+      case FEED.EXPLORE.GET : {
+        return {
+          ...state,
+          explore: [...state.explore,...action.payload]
+        }
       }
         default:
             return state

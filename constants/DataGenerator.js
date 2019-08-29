@@ -47,6 +47,30 @@ export const getRandomPosts = () => {
         }));
 };
 
+export const getRandomPost = (index) => {
+  return ({
+    key: index,
+    name: getRandomUsername(),
+    isStorySeen: getRandomBoolean(),
+    location: getRandomLocationName(),
+    imageUrl: getRandomPostUrl(),
+    caption: getRandomCaption(),
+    numberOfComments: getRandomInt(0,1500),
+    avatarUrl: getRandomAvatarUrl(),
+    timestamp: `${getRandomInt(2,30)} ${getRandomTimeUnit()}s ago`
+  })
+};
+
+export const getRandomExplorePosts = () => {
+  return new Array(15)
+    .fill('0')
+    .map((a,index) => ([
+      getRandomPost(index*3),
+      getRandomPost(index*3+1),
+      getRandomPost(index*3+2)
+    ]));
+};
+
 export function getRandomCaption() {
   return faker.lorem.paragraphs();
 }
