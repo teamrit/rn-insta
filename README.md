@@ -9,3 +9,7 @@ React Native Instagram Layout Clone
 * Random Comment Counter
 * Pull to refresh
 * Redux Usage to store image urls and metadata
+
+**Future considerations:**
+* Consider velocity in pull-up gesture.
+* Better memory management
